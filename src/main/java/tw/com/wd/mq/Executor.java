@@ -6,11 +6,20 @@ import java.util.concurrent.*;
 public class Executor {
     public static void main(String[] args) throws Exception {
         BlockingQueue<Runnable> threadQueue = new LinkedBlockingQueue<>(100);
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(3, 3, 1000L, TimeUnit.MILLISECONDS, threadQueue);
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(10, 10, 1000L, TimeUnit.MILLISECONDS, threadQueue);
 
-        pool.submit(new SimpleMQPublisher());
+        Future f1 = pool.submit(new SimpleMQPusher());
         Thread.sleep(1000L);
-        Future future = pool.submit(new SimpleMQSubscriber());
-        Thread.currentThread().join();
+        Future f2 = pool.submit(new SimpleMQPuller());
+        Future f3 = pool.submit(new SimpleMQPuller());
+
+        while (true) {
+            if (f1.isDone() && f2.isDone() && f3.isDone()) {
+                break;
+            } else {
+                Thread.sleep(1000L);
+            }
+        }
+        pool.shutdown();
     }
 }

@@ -17,12 +17,12 @@ public class SimpleMQSubscriber implements MQWorker {
 
             while (true) {
                 String topic = socket.recvStr();
-                System.out.println("topic: " + topic);
+                System.out.println("[" + this.toString() + "] " + "topic: " + topic);
                 if (topic == null)
                     break;
                 String data = socket.recvStr();
                 assert (topic.equals("hello"));
-                System.out.println("Data: " + data);
+                System.out.println("[" + this.toString() + "] " + "Data: " + data);
             }
         }
         return null;

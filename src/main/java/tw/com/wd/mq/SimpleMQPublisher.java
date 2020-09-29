@@ -13,7 +13,7 @@ public class SimpleMQPublisher implements MQWorker {
             ZMQ.Socket socket = context.createSocket(SocketType.PUB);
             socket.bind("tcp://*:5555");
 
-            Thread.sleep(1000L);
+            Thread.sleep(3000L);
 
             socket.send("hello", ZMQ.SNDMORE);
             socket.send("content");
